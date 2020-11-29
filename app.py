@@ -8,6 +8,7 @@ import os
 from google.cloud.texttospeech_v1beta1 import SsmlVoiceGender
 import werkzeug
 from werkzeug.utils import secure_filename
+
 # We use secure_filename from the module werkzeug.utils.
 # This is essential as we need to sanitize the file name before using it anywhere
 
@@ -24,7 +25,7 @@ client = texttospeech.TextToSpeechClient()
 # Function to generate the translated text and audio from translated text
 
 
-def translate_text(text, selected_language_code, selected_gender, selected_voice):
+def translate_text(text, selected_language_code, selected_voice):
     translate_client = translate.Client()
     if isinstance(text, six.binary_type):
         text = text.decode("utf-8")
@@ -146,7 +147,8 @@ class GenerateAudio(Resource):
         # Write the file sent to the directory.
         with open(os.path.join(path, secure_filename(file.filename).split('.')[0]
                                      + '----' + selected_language + '----' + selected_gender
-                                     + '----' + selected_voice + '.' + secure_filename(file.filename).split('.')[1]),
+                                     + '----' + selected_voice + '.' +
+                                     secure_filename(file.filename).split('.')[1]),
                   "wb") as file1:
             file1.write(file_content)
 
@@ -168,8 +170,7 @@ class GenerateTranslatedAudio(Resource):
     def post(self):
         parser = reqparse.RequestParser()
         # Define the request parameters
-        parser.add_argument('upload_file', type=str,
-                            help='Send File To Upload')
+        parser.add_argument('upload_file', type=str, help='Send File To Upload')
         parser.add_argument('language', type=str, help='No Language Selected')
         parser.add_argument('language_code', type=str, help='No Language Selected')
         parser.add_argument('gender', type=str, help='No Language Selected')
