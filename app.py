@@ -121,9 +121,9 @@ class GenerateAudio(Resource):
         parser.add_argument('upload_file', location='files', type=werkzeug.datastructures.FileStorage,
                             help='Send File To Upload')
         parser.add_argument('language', type=str, help='No Language Selected')
-        parser.add_argument('language_code', type=str, help='No Language Selected')
-        parser.add_argument('gender', type=str, help='No Language Selected')
-        parser.add_argument('voice', type=str, help='No Language Selected')
+        parser.add_argument('language_code', type=str, help='No Language Code Selected')
+        parser.add_argument('gender', type=str, help='No Gender Selected')
+        parser.add_argument('voice', type=str, help='No Voice Selected')
         # Fetch the request parameters
         args = parser.parse_args()
         file = args['upload_file']
@@ -132,13 +132,13 @@ class GenerateAudio(Resource):
         selected_gender = args['gender']
         selected_voice = args['voice']
         # Generate the path of the directory where the generated audio should be stored. For each file
-        # the script creates a new directory with the name of the file and stores te sent file along with the
+        # the script creates a new directory with the name of the file and stores the sent file along with the
         # generated audio in the same directory
         path = os.path.join(storagePath, secure_filename(
             file.filename) + '----' + selected_language + '----' + selected_gender + '----' + selected_voice)
 
         file_content = file.read()
-        # Check is the directory already exists. os.mkdir returns an error if the path is already present
+        # Check if the directory already exists. os.mkdir returns an error if the path is already present
         if os.path.exists(path):
             # Remove the directory if it already exists
             shutil.rmtree(path)
@@ -172,9 +172,9 @@ class GenerateTranslatedAudio(Resource):
         # Define the request parameters
         parser.add_argument('upload_file', type=str, help='Send File To Upload')
         parser.add_argument('language', type=str, help='No Language Selected')
-        parser.add_argument('language_code', type=str, help='No Language Selected')
-        parser.add_argument('gender', type=str, help='No Language Selected')
-        parser.add_argument('voice', type=str, help='No Language Selected')
+        parser.add_argument('language_code', type=str, help='No Language Code Selected')
+        parser.add_argument('gender', type=str, help='No Gender Selected')
+        parser.add_argument('voice', type=str, help='No Voice Selected')
         # Fetch the request parameters
         args = parser.parse_args()
         file = args['upload_file']
